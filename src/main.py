@@ -12,20 +12,22 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
+from pathlib import Path
 # import seaborn as sns
 # import pandas as pd
 
 t0 = time.time()
 
-PATH = "C:\\Users\\Ivanov\\Desktop\\работа\\данные\\plate_2024_03_14.csv"
-OUT = "C:\\Users\\Ivanov\\Desktop\\работа\\результаты\\"
+BASE_DIR = Path(__file__).resolve().parent.parent
+DEFAULT_INPUT = BASE_DIR / "data" / "raw" / "plate_2024_03_14.csv"
+DEFAULT_RESULTS = BASE_DIR / "results"
 
 RESULTS = []
 BAD = []
 
 
 def read_plate():
-    f = open(PATH)
+    f = open(DEFAULT_INPUT)
     lines = f.readlines()
     data = {}
     n = 0
@@ -163,17 +165,17 @@ plt.xlabel("концентрация, мкМ", fontsize=14)
 plt.ylabel("жизнеспособность, %", fontsize=14)
 plt.title("Планшет 14.03.2024")
 plt.legend()
-plt.savefig(OUT + "graph.png", dpi=300)
+plt.savefig(DEFAULT_RESULTS / "graph.png", dpi=300)
 print("график сохранён")
 
-r = open(OUT + "report.txt", "w")
+r = open(DEFAULT_RESULTS / "report.txt", "w")
 r.write("ОТЧЁТ\n")
-r.write("файл: " + PATH + "\n")
+r.write("файл: " + DEFAULT_INPUT.name + "\n")
 for x in RESULTS:
     r.write(x[0] + "\t" + str(x[1]) + "\t" + str(x[2]) + "\n")
 r.write("t = " + str(t) + " p = " + str(p) + "\n")
 r.close()
 
-print("отчёт записан в", OUT + "report.txt")
+print("отчёт записан в", DEFAULT_RESULTS / "report.txt")
 print("время работы", time.time() - t0)
 print("ГОТОВО")
